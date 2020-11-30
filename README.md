@@ -1,10 +1,5 @@
- Quick Open
+# Quick Open
 
-Some improvements for an existing spotlight imitation based on personal taste.
+This repo is mainly used for test submodule. It also accomodates some improvements for an existing spotlight imitation based on personal taste.
 
-Improvements include:
-
-- always float on top
-- global hotkey without funk noise
-- close window when clicking outside box
-- no extra window regardless app running as agent or not
+For actual improvements, please reference README [here](https://github.com/oscardoudou/QuickOpen-Demo/blob/master/README.md)
