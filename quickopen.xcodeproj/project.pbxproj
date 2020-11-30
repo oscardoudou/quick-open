@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B52703F2421B70C004475FE /* QuickOpenSearchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B52703E2421B70C004475FE /* QuickOpenSearchDelegate.swift */; };
 		3B5270412421C0A7004475FE /* QuickOpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5270402421C0A7004475FE /* QuickOpenSearch.swift */; };
 		3B9234502418955500364BBC /* quickopen.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B92344E2418955500364BBC /* quickopen.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3B923457241895F000364BBC /* QuickOpenWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B923456241895F000364BBC /* QuickOpenWindowController.swift */; };
@@ -17,7 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3B52703E2421B70C004475FE /* QuickOpenSearchDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenSearchDelegate.swift; sourceTree = "<group>"; };
 		3B5270402421C0A7004475FE /* QuickOpenSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenSearch.swift; sourceTree = "<group>"; };
 		3B92344B2418955500364BBC /* quickopen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = quickopen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B92344E2418955500364BBC /* quickopen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = quickopen.h; sourceTree = "<group>"; };
@@ -64,7 +62,6 @@
 				3B9234582418966500364BBC /* QuickOpenViewController.swift */,
 				3B92344E2418955500364BBC /* quickopen.h */,
 				3B92344F2418955500364BBC /* Info.plist */,
-				3B52703E2421B70C004475FE /* QuickOpenSearchDelegate.swift */,
 				3B5270402421C0A7004475FE /* QuickOpenSearch.swift */,
 			);
 			path = quickopen;
@@ -150,7 +147,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B52703F2421B70C004475FE /* QuickOpenSearchDelegate.swift in Sources */,
 				3B92345B2418969100364BBC /* QuickOpenWindow.swift in Sources */,
 				3BEB4F1025745BA000ED8B07 /* GlobalEventMonitor.swift in Sources */,
 				3B9234592418966500364BBC /* QuickOpenViewController.swift in Sources */,
