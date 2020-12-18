@@ -10,18 +10,21 @@ import Foundation
 import Cocoa
 
 class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
-    
-    private var search: QuickOpenSearch!
+
+    private var search: QuickOpenOption!
+    private var matches: [Any]!
     
     private var visualEffectView: NSVisualEffectView!
     private var stackView: NSStackView!
+    private var scrollView: NSScrollView!
+    private var matchesOutlineView: NSOutlineView!
     private var searchField: NSTextField!
     
-    var quickOpenWindowController: QuickOpenWindowController? {
+    private var quickOpenWindowController: QuickOpenWindowController? {
       return view.window?.windowController as? QuickOpenWindowController
     }
     
-    init(search : QuickOpenSearch) {
+    init(search : QuickOpenOption) {
       super.init(nibName: nil, bundle: nil)
         self.search = search
     }
@@ -31,7 +34,7 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func loadView() {
-      let frame = NSRect(x: 0,y: 0,width: 400,height: 44)
+        let frame = NSRect(x: 0,y: 0,width: search.width, height: search.height)
 
       view = NSView()
       view.frame = frame
@@ -42,45 +45,61 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpSearchField()
-        setUpVisualEffectView()
+        setUpMatchesOutLineView()
+        setUpScrollView()
         setUpStackView()
+        setUpVisualEffectView()
+        
         stackView.addArrangedSubview(searchField)
+        stackView.addArrangedSubview(scrollView)
         visualEffectView.addSubview(stackView)
         
         view.addSubview(visualEffectView)
         
         setupConstraints()
+        
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear() {
+        searchField.stringValue = ""
         view.window?.makeFirstResponder(searchField)
     }
     override var acceptsFirstResponder: Bool {
       return true
     }
+    
+    override func keyUp(with event: NSEvent) {
 
+      let text = searchField.stringValue
+      matches = search.delegate?.textWasEntered(toBeSearched: text)
+      reLoadMatches()
+      print("text to be searched: \(text)")
+    }
+    private func reLoadMatches(){
+        matchesOutlineView.reloadData()
+        updateView()
+    }
+    private func updateView(){
+        let rowHeight = CGFloat(250)
+        let newHeight = search.height + rowHeight
+        let newSize = NSSize(width: search.width, height: newHeight)
+
+        guard var frame = view.window?.frame else {return}
+        
+        print("frame.origin.y:  \(frame.origin.y)");
+        frame.origin.y += frame.size.height
+        frame.origin.y -= newSize.height
+        frame.size = newSize
+        
+        view.setFrameSize(newSize)
+        visualEffectView.setFrameSize(newSize)
+        view.window?.setFrame(frame, display: true)
+        stackView.spacing = 4.0
+    }
     override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
         }
-    }
-    private func setUpVisualEffectView(){
-        let frame = NSRect(x: 0 ,y: 0, width: 400, height: 44)
-        visualEffectView = NSVisualEffectView()
-        visualEffectView.state = .active
-        visualEffectView.frame = frame
-        visualEffectView.wantsLayer = true
-        visualEffectView.blendingMode = .behindWindow
-        visualEffectView.layer?.cornerRadius = 7
-        visualEffectView.material = .popover
-    }
-    private func setUpStackView(){
-        stackView = NSStackView()
-        stackView.spacing = 0.0
-        stackView.orientation = .vertical
-        stackView.distribution = .fillEqually
-        stackView.edgeInsets = NSEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
     }
     private func setUpSearchField(){
         //as long as set frame to search field, search box is not moveable 
@@ -92,10 +111,47 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         searchField.isEditable = true
         searchField.isBezeled = false
         searchField.isSelectable = true
-        searchField.font =  NSFont.systemFont(ofSize: 20, weight: .light)
+        searchField.font =  search.font
         searchField.focusRingType = .none
         searchField.drawsBackground = false
-        searchField.placeholderString = "hey"
+        searchField.placeholderString = search.placeholder
+    }
+    private func setUpMatchesOutLineView(){
+        matchesOutlineView = NSOutlineView()
+        //avoid header row
+        matchesOutlineView.headerView = nil
+        matchesOutlineView.wantsLayer = true
+        //use sourceList so there is no background
+        matchesOutlineView.selectionHighlightStyle = .sourceList
+    }
+    private func setUpScrollView(){
+        scrollView = NSScrollView()
+        scrollView.drawsBackground = false
+//        scrollView.wantsLayer = true
+        scrollView.documentView = matchesOutlineView
+        scrollView.borderType = .noBorder
+        scrollView.autohidesScrollers = true
+        scrollView.hasVerticalScroller = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = true
+
+    }
+    private func setUpStackView(){
+        stackView = NSStackView()
+        stackView.spacing = 0.0
+        stackView.orientation = .vertical
+        stackView.distribution = .fillEqually
+        stackView.edgeInsets = search.edgeInsets
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    private func setUpVisualEffectView(){
+        let frame = NSRect(x: 0 ,y: 0, width: search.width, height: search.height)
+        visualEffectView = NSVisualEffectView()
+        visualEffectView.frame = frame
+        visualEffectView.state = .active
+        visualEffectView.wantsLayer = true
+        visualEffectView.blendingMode = .behindWindow
+        visualEffectView.layer?.cornerRadius = search.radius
+        visualEffectView.material = search.material
     }
     private func setupConstraints() {
       let stackViewConstraints = [
