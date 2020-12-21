@@ -26,7 +26,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     
     init(search : QuickOpenOption) {
       super.init(nibName: nil, bundle: nil)
-        self.search = search
+      self.search = search
+      self.matches = []
     }
 
     required init?(coder: NSCoder) {
@@ -73,7 +74,6 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
       let text = searchField.stringValue
       matches = search.delegate?.textWasEntered(toBeSearched: text)
       reLoadMatches()
-      print("text to be searched: \(text)")
     }
     private func reLoadMatches(){
         matchesOutlineView.reloadData()
@@ -118,11 +118,18 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
     private func setUpMatchesOutLineView(){
         matchesOutlineView = NSOutlineView()
+        //required
+        matchesOutlineView.delegate = self
+        //required
+        matchesOutlineView.dataSource = self
         //avoid header row
         matchesOutlineView.headerView = nil
         matchesOutlineView.wantsLayer = true
         //use sourceList so there is no background
         matchesOutlineView.selectionHighlightStyle = .sourceList
+        //honestly dont understand why adding column to the view is important. I mean without column, view is still createe, right, why delegate can't be called without this stmt
+        let column = NSTableColumn()
+        matchesOutlineView.addTableColumn(column)
     }
     private func setUpScrollView(){
         scrollView = NSScrollView()
@@ -166,5 +173,23 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
 
 
 }
+extension QuickOpenViewController: NSOutlineViewDataSource{
+    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+        return matches.count
+    }
+    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
+        return matches[index]
+    }
+    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
+        return false
+    }
+    func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
+        return search.height
+    }
+}
 
-
+extension QuickOpenViewController: NSOutlineViewDelegate{
+    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
+        return search.delegate?.quickOpen(item)
+    }
+}
