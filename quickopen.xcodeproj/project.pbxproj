@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		3B0EE63D25852463000018FF /* QuickOpenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0EE63C25852463000018FF /* QuickOpenDelegate.swift */; };
 		3B5270412421C0A7004475FE /* QuickOpenOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5270402421C0A7004475FE /* QuickOpenOption.swift */; };
+		3B83A6E9259A9DF600777254 /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B83A6E8259A9DF600777254 /* LeftViewController.swift */; };
+		3B83A6ED259A9E9000777254 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B83A6EC259A9E9000777254 /* RightViewController.swift */; };
+		3B83A6EF259A9F0D00777254 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B83A6EE259A9F0D00777254 /* SplitViewController.swift */; };
 		3B9234502418955500364BBC /* quickopen.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B92344E2418955500364BBC /* quickopen.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3B923457241895F000364BBC /* QuickOpenWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B923456241895F000364BBC /* QuickOpenWindowController.swift */; };
 		3B9234592418966500364BBC /* QuickOpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9234582418966500364BBC /* QuickOpenViewController.swift */; };
@@ -19,6 +22,9 @@
 /* Begin PBXFileReference section */
 		3B0EE63C25852463000018FF /* QuickOpenDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenDelegate.swift; sourceTree = "<group>"; };
 		3B5270402421C0A7004475FE /* QuickOpenOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenOption.swift; sourceTree = "<group>"; };
+		3B83A6E8259A9DF600777254 /* LeftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
+		3B83A6EC259A9E9000777254 /* RightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
+		3B83A6EE259A9F0D00777254 /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		3B92344B2418955500364BBC /* quickopen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = quickopen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B92344E2418955500364BBC /* quickopen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = quickopen.h; sourceTree = "<group>"; };
 		3B92344F2418955500364BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +72,9 @@
 				3B92344F2418955500364BBC /* Info.plist */,
 				3B5270402421C0A7004475FE /* QuickOpenOption.swift */,
 				3B0EE63C25852463000018FF /* QuickOpenDelegate.swift */,
+				3B83A6E8259A9DF600777254 /* LeftViewController.swift */,
+				3B83A6EC259A9E9000777254 /* RightViewController.swift */,
+				3B83A6EE259A9F0D00777254 /* SplitViewController.swift */,
 			);
 			path = quickopen;
 			sourceTree = "<group>";
@@ -151,10 +160,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B92345B2418969100364BBC /* QuickOpenWindow.swift in Sources */,
+				3B83A6ED259A9E9000777254 /* RightViewController.swift in Sources */,
 				3BEB4F1025745BA000ED8B07 /* GlobalEventMonitor.swift in Sources */,
 				3B0EE63D25852463000018FF /* QuickOpenDelegate.swift in Sources */,
 				3B9234592418966500364BBC /* QuickOpenViewController.swift in Sources */,
+				3B83A6EF259A9F0D00777254 /* SplitViewController.swift in Sources */,
 				3B5270412421C0A7004475FE /* QuickOpenOption.swift in Sources */,
+				3B83A6E9259A9DF600777254 /* LeftViewController.swift in Sources */,
 				3B923457241895F000364BBC /* QuickOpenWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

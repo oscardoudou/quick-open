@@ -20,6 +20,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     private var matchesOutlineView: NSOutlineView!
     private var searchField: NSTextField!
     
+    private var splitVC: SplitViewController!
+    
     private var quickOpenWindowController: QuickOpenWindowController? {
       return view.window?.windowController as? QuickOpenWindowController
     }
@@ -47,16 +49,28 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         super.viewDidLoad()
         setUpSearchField()
         setUpMatchesOutLineView()
-        setUpScrollView()
+//        setUpScrollView()
         setUpStackView()
         setUpVisualEffectView()
         
         stackView.addArrangedSubview(searchField)
-        stackView.addArrangedSubview(scrollView)
+//        stackView.addArrangedSubview(scrollView)
+        splitVC = SplitViewController(leftScrollDocumentView: matchesOutlineView)
+        print(splitVC.view)
+        print(splitVC.splitView)
+        stackView.addArrangedSubview(splitVC.splitView)
+//        splitVC.view.translatesAutoresizingMaskIntoConstraints = true
+//        splitVC.view.autoresizingMask = [.height, .width]
+//        splitVC.splitView.setPosition(150, ofDividerAt:0)
+//        splitVC.splitView.adjustSubviews()
         visualEffectView.addSubview(stackView)
         
+//        splitVC.splitView.setFrameSize(NSSize(width: 400, height: 250))
         view.addSubview(visualEffectView)
-        
+//        print(splitVC.view.contentHuggingPriority(for: .horizontal))
+//        print(stackView.arrangedSubviews[1].contentHuggingPriority(for: .horizontal))
+//        print(splitVC.view.contentHuggingPriority(for: .vertical))
+//        print(stackView.arrangedSubviews[1].contentHuggingPriority(for: .vertical))
         setupConstraints()
         
         // Do any additional setup after loading the view.
@@ -95,6 +109,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         visualEffectView.setFrameSize(newSize)
         view.window?.setFrame(frame, display: true)
         stackView.spacing = 4.0
+//        splitVC.splitView.setFrameSize(NSSize(width: 400, height: 250))'
+        setupSplitViewConstraints()
     }
     override var representedObject: Any? {
         didSet {
@@ -169,6 +185,15 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
       ]
 
       NSLayoutConstraint.activate(stackViewConstraints)
+    }
+    private func setupSplitViewConstraints() {
+//                splitVC.splitViewItems[0].viewController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
+//                splitVC.splitViewItems[1].viewController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
+        let splitViewConstratints = [
+            splitVC.splitViewItems[0].viewController.view.widthAnchor.constraint(equalToConstant: 200),
+            splitVC.splitViewItems[1].viewController.view.widthAnchor.constraint(equalToConstant: 300)
+        ]
+        NSLayoutConstraint.activate(splitViewConstratints)
     }
 
 
