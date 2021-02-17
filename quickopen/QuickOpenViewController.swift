@@ -94,7 +94,7 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         updateView()
     }
     private func updateView(){
-        let rowHeight = CGFloat(250)
+        let rowHeight = matches.count > 0 ? CGFloat(250) : 0
         let newHeight = search.height + rowHeight
         let newSize = NSSize(width: search.width, height: newHeight)
 
@@ -108,7 +108,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         view.setFrameSize(newSize)
         visualEffectView.setFrameSize(newSize)
         view.window?.setFrame(frame, display: true)
-        stackView.spacing = 4.0
+        //have remedy of splitView in searchbox after clear text, not sure if it is bc initially splitView has height even nothing in the textField(no matches)
+        stackView.spacing = matches.count > 0 ? 5.0 : 0
 //        splitVC.splitView.setFrameSize(NSSize(width: 400, height: 250))'
         setupSplitViewConstraints()
     }
