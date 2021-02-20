@@ -11,10 +11,12 @@ import Cocoa
 public class QuickOpenOption{
     public init(){
         self.radius = 7
-        self.height = 44
-        self.width = 400
-        self.font = NSFont.systemFont(ofSize: 20, weight: .light)
+        self.height = 50
+        self.width = 650
+        //textField contentSize is fontsize + 4, so if font is 26, then contentSize is 30, along with top bottom edgeInset constraint that's 50, which compress the room of splitView
+        self.font = NSFont.systemFont(ofSize: 26, weight: .light)
         self.material = .popover
+        //stackView also use this.
         self.edgeInsets = NSEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         self.placeholder = "Quick Open"
         self.persistPosition = true

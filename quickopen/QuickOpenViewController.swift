@@ -13,7 +13,13 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
 
     private var search: QuickOpenOption!
     private var matches: [Any]!
-    
+    //this fix the remainding portion of splitView when search text is empty(matches.count == 0)
+    {
+        didSet{
+            let splitView = stackView.arrangedSubviews[1]
+            splitView.isHidden = matches.count == 0 ? true : false
+        }
+    }
     private var visualEffectView: NSVisualEffectView!
     private var stackView: NSStackView!
     private var scrollView: NSScrollView!
@@ -56,23 +62,15 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         stackView.addArrangedSubview(searchField)
 //        stackView.addArrangedSubview(scrollView)
         splitVC = SplitViewController(leftScrollDocumentView: matchesOutlineView)
+        //this line is important! otherwise splitView wont show up. Must did something wrong
         print(splitVC.view)
-        print(splitVC.splitView)
         stackView.addArrangedSubview(splitVC.splitView)
-//        splitVC.view.translatesAutoresizingMaskIntoConstraints = true
-//        splitVC.view.autoresizingMask = [.height, .width]
-//        splitVC.splitView.setPosition(150, ofDividerAt:0)
-//        splitVC.splitView.adjustSubviews()
+        //this line doesn't work, try set autosaveName also not working. Ugh, for now just set each splitView width anchor constraints
+//        splitVC.splitView.setPosition(50, ofDividerAt:0)
         visualEffectView.addSubview(stackView)
-        
-//        splitVC.splitView.setFrameSize(NSSize(width: 400, height: 250))
         view.addSubview(visualEffectView)
-//        print(splitVC.view.contentHuggingPriority(for: .horizontal))
-//        print(stackView.arrangedSubviews[1].contentHuggingPriority(for: .horizontal))
-//        print(splitVC.view.contentHuggingPriority(for: .vertical))
-//        print(stackView.arrangedSubviews[1].contentHuggingPriority(for: .vertical))
         setupConstraints()
-        
+        setupSplitViewConstraints(leftViewWidth: 250)
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear() {
@@ -110,8 +108,6 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         view.window?.setFrame(frame, display: true)
         //have remedy of splitView in searchbox after clear text, not sure if it is bc initially splitView has height even nothing in the textField(no matches)
         stackView.spacing = matches.count > 0 ? 5.0 : 0
-//        splitVC.splitView.setFrameSize(NSSize(width: 400, height: 250))'
-        setupSplitViewConstraints()
     }
     override var representedObject: Any? {
         didSet {
@@ -187,12 +183,10 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
 
       NSLayoutConstraint.activate(stackViewConstraints)
     }
-    private func setupSplitViewConstraints() {
-//                splitVC.splitViewItems[0].viewController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
-//                splitVC.splitViewItems[1].viewController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
+    private func setupSplitViewConstraints(leftViewWidth: CGFloat) {
         let splitViewConstratints = [
-            splitVC.splitViewItems[0].viewController.view.widthAnchor.constraint(equalToConstant: 200),
-            splitVC.splitViewItems[1].viewController.view.widthAnchor.constraint(equalToConstant: 300)
+            splitVC.splitViewItems[0].viewController.view.widthAnchor.constraint(equalToConstant: leftViewWidth),
+            splitVC.splitViewItems[1].viewController.view.widthAnchor.constraint(equalToConstant: search.width - leftViewWidth),
         ]
         NSLayoutConstraint.activate(splitViewConstratints)
     }
