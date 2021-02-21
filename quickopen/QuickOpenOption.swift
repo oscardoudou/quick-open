@@ -20,6 +20,7 @@ public class QuickOpenOption{
         self.edgeInsets = NSEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         self.placeholder = "Quick Open"
         self.persistPosition = true
+        self.persistMatches = false
     }
     public var height: CGFloat
     public var width: CGFloat
@@ -32,4 +33,5 @@ public class QuickOpenOption{
     public var persistPosition: Bool
     public var material: NSVisualEffectView.Material
     public var delegate: QuickOpenDelegate?
+    public var persistMatches: Bool
 }

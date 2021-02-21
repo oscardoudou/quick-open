@@ -9,6 +9,10 @@
 import Foundation
 import Cocoa
 
+enum KeyCode {
+  static let esc: UInt16 = 53
+}
+
 class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
 
     private var search: QuickOpenOption!
@@ -27,6 +31,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     private var searchField: NSTextField!
     
     private var splitVC: SplitViewController!
+    private var leftVC: LeftViewController!
+    private var rightVC: RightViewController!
     
     private var quickOpenWindowController: QuickOpenWindowController? {
       return view.window?.windowController as? QuickOpenWindowController
@@ -62,6 +68,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         stackView.addArrangedSubview(searchField)
 //        stackView.addArrangedSubview(scrollView)
         splitVC = SplitViewController(leftScrollDocumentView: matchesOutlineView)
+        leftVC = splitVC.leftVC
+        rightVC = splitVC.rightVC
         //this line is important! otherwise splitView wont show up. Must did something wrong
         print(splitVC.view)
         stackView.addArrangedSubview(splitVC.splitView)
@@ -71,10 +79,14 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         view.addSubview(visualEffectView)
         setupConstraints()
         setupSplitViewConstraints(leftViewWidth: 250)
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: keyDown)
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear() {
-        searchField.stringValue = ""
+        if !search.persistMatches {
+            searchField.stringValue = ""
+            clearMatches()
+        }
         view.window?.makeFirstResponder(searchField)
     }
     override var acceptsFirstResponder: Bool {
@@ -86,6 +98,18 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
       let text = searchField.stringValue
       matches = search.delegate?.textWasEntered(toBeSearched: text)
       reLoadMatches()
+    }
+    func keyDown(with event: NSEvent) -> NSEvent?{
+        let keyCode = event.keyCode
+        if keyCode == KeyCode.esc {
+            quickOpenWindowController?.toggle()
+            return nil
+        }
+        return event
+    }
+    private func clearMatches(){
+        matches = []
+        reLoadMatches()
     }
     private func reLoadMatches(){
         matchesOutlineView.reloadData()
@@ -185,8 +209,8 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
     private func setupSplitViewConstraints(leftViewWidth: CGFloat) {
         let splitViewConstratints = [
-            splitVC.splitViewItems[0].viewController.view.widthAnchor.constraint(equalToConstant: leftViewWidth),
-            splitVC.splitViewItems[1].viewController.view.widthAnchor.constraint(equalToConstant: search.width - leftViewWidth),
+            leftVC.view.widthAnchor.constraint(equalToConstant: leftViewWidth),
+            rightVC.view.widthAnchor.constraint(equalToConstant: search.width - leftViewWidth),
         ]
         NSLayoutConstraint.activate(splitViewConstratints)
     }

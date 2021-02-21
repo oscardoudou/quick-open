@@ -11,16 +11,18 @@ import Cocoa
 
 class SplitViewController: NSSplitViewController{
     private var matchesOutlineView : NSView!
+    public var leftVC: LeftViewController!
+    public var rightVC: RightViewController!
     private func patch() {
         let v = NSSplitView()
         v.isVertical = true
         v.dividerStyle = .thin
         splitView = v
-        let lvc = LeftViewController(backgroundColor: .red, scrollDocumentView: matchesOutlineView )
-        let rvc = RightViewController(backgroundColor: .green)
+        leftVC = LeftViewController(backgroundColor: .red, scrollDocumentView: matchesOutlineView )
+        rightVC = RightViewController(backgroundColor: .green)
         splitViewItems = [
-            NSSplitViewItem(viewController: lvc),
-            NSSplitViewItem(viewController: rvc),
+            NSSplitViewItem(viewController: leftVC),
+            NSSplitViewItem(viewController: rightVC),
         ]
 //        splitViewItems[0].minimumThickness = 150
 //        splitViewItems[1].minimumThickness = 250
