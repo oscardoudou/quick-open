@@ -11,11 +11,16 @@ import Cocoa
 
 class LeftViewController: NSViewController{
     private let backgroundColor: NSColor
-    private let matchesOutlineView: NSView
+    //shouldn't be public I think
+    public var matchesOutlineView: NSOutlineView!
+    public var matches: [Any]!
+    private var search: QuickOpenOption!
     
-    init(backgroundColor: NSColor, scrollDocumentView: NSView) {
+    init(backgroundColor: NSColor, search: QuickOpenOption) {
+        print("LeftVC init")
        self.backgroundColor = backgroundColor
-       self.matchesOutlineView = scrollDocumentView
+        self.search = search
+        self.matches = []
        super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,7 +35,8 @@ class LeftViewController: NSViewController{
         
 //        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
 //        view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
-        
+        print("LeftVC loadView")
+        setUpMatchesOutLineView()
         view = NSScrollView()
         view.layer?.backgroundColor = backgroundColor.cgColor
         if let scrollView = view as? NSScrollView {
@@ -42,8 +48,49 @@ class LeftViewController: NSViewController{
             scrollView.hasVerticalScroller = true
             scrollView.translatesAutoresizingMaskIntoConstraints = true
         }
-        
+    }
+
+    private func setUpMatchesOutLineView(){
+        matchesOutlineView = NSOutlineView()
+        //required
+        matchesOutlineView.delegate = self
+        //required
+        matchesOutlineView.dataSource = self
+        //avoid header row
+        matchesOutlineView.headerView = nil
+        matchesOutlineView.wantsLayer = true
+        //use sourceList so there is no background
+        matchesOutlineView.selectionHighlightStyle = .sourceList
+        //honestly dont understand why adding column to the view is important. I mean without column, view is still createe, right, why delegate can't be called without this stmt
+        let column = NSTableColumn()
+        matchesOutlineView.addTableColumn(column)
+    }
+
+    override func viewDidLoad() {
+        print("LeftVC viewDidLoad before super.viewDidLoad()")
+        super.viewDidLoad()
+        print("LeftVC viewDidLoad after super.viewDidLoad()")
         
     }
     
+}
+extension LeftViewController: NSOutlineViewDataSource{
+    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+        return matches.count
+    }
+    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
+        return matches[index]
+    }
+    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
+        return false
+    }
+    func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
+        return search.height
+    }
+}
+
+extension LeftViewController: NSOutlineViewDelegate{
+    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
+        return search.delegate?.quickOpen(item)
+    }
 }

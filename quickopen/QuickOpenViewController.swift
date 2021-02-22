@@ -22,14 +22,14 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         didSet{
             let splitView = stackView.arrangedSubviews[1]
             splitView.isHidden = matches.count == 0 ? true : false
+            leftVC.matches = matches
         }
     }
     private var visualEffectView: NSVisualEffectView!
     private var stackView: NSStackView!
-    private var scrollView: NSScrollView!
     private var matchesOutlineView: NSOutlineView!
     private var searchField: NSTextField!
-    
+
     private var splitVC: SplitViewController!
     private var leftVC: LeftViewController!
     private var rightVC: RightViewController!
@@ -49,34 +49,36 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func loadView() {
+        print("quickopenVC loadView()")
         let frame = NSRect(x: 0,y: 0,width: search.width, height: search.height)
 
       view = NSView()
       view.frame = frame
       view.wantsLayer = true
         view.layer?.cornerRadius = search.radius + 1
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
         setUpSearchField()
-        setUpMatchesOutLineView()
-//        setUpScrollView()
         setUpStackView()
         setUpVisualEffectView()
         
         stackView.addArrangedSubview(searchField)
-//        stackView.addArrangedSubview(scrollView)
-        splitVC = SplitViewController(leftScrollDocumentView: matchesOutlineView)
-        leftVC = splitVC.leftVC
-        rightVC = splitVC.rightVC
+        splitVC = SplitViewController(search: search)
         //this line is important! otherwise splitView wont show up. Must did something wrong
-        print(splitVC.view)
-        stackView.addArrangedSubview(splitVC.splitView)
+//        print("splitVC.view: \(splitVC.view)")
+        stackView.addArrangedSubview(splitVC.view)
         //this line doesn't work, try set autosaveName also not working. Ugh, for now just set each splitView width anchor constraints
 //        splitVC.splitView.setPosition(50, ofDividerAt:0)
         visualEffectView.addSubview(stackView)
         view.addSubview(visualEffectView)
+    }
+
+    override func viewDidLoad() {
+        leftVC = splitVC.leftVC
+        rightVC = splitVC.rightVC
+        matchesOutlineView = leftVC.matchesOutlineView
+        print("quickopenVC viewDidLoad before super.viewDidLoad()")
+        super.viewDidLoad()
+        print("quickopenVC viewDidLoad before super.viewDidLoad()")
         setupConstraints()
         setupSplitViewConstraints(leftViewWidth: 250)
         NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: keyDown)
@@ -153,32 +155,6 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         searchField.drawsBackground = false
         searchField.placeholderString = search.placeholder
     }
-    private func setUpMatchesOutLineView(){
-        matchesOutlineView = NSOutlineView()
-        //required
-        matchesOutlineView.delegate = self
-        //required
-        matchesOutlineView.dataSource = self
-        //avoid header row
-        matchesOutlineView.headerView = nil
-        matchesOutlineView.wantsLayer = true
-        //use sourceList so there is no background
-        matchesOutlineView.selectionHighlightStyle = .sourceList
-        //honestly dont understand why adding column to the view is important. I mean without column, view is still createe, right, why delegate can't be called without this stmt
-        let column = NSTableColumn()
-        matchesOutlineView.addTableColumn(column)
-    }
-    private func setUpScrollView(){
-        scrollView = NSScrollView()
-        scrollView.drawsBackground = false
-//        scrollView.wantsLayer = true
-        scrollView.documentView = matchesOutlineView
-        scrollView.borderType = .noBorder
-        scrollView.autohidesScrollers = true
-        scrollView.hasVerticalScroller = true
-        scrollView.translatesAutoresizingMaskIntoConstraints = true
-
-    }
     private func setUpStackView(){
         stackView = NSStackView()
         stackView.spacing = 0.0
@@ -216,24 +192,4 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
 
 
-}
-extension QuickOpenViewController: NSOutlineViewDataSource{
-    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        return matches.count
-    }
-    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-        return matches[index]
-    }
-    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
-        return false
-    }
-    func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
-        return search.height
-    }
-}
-
-extension QuickOpenViewController: NSOutlineViewDelegate{
-    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
-        return search.delegate?.quickOpen(item)
-    }
 }

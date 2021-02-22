@@ -14,6 +14,7 @@ class RightViewController: NSViewController{
     private let backgroundColor: NSColor
 
     init(backgroundColor: NSColor) {
+        print("RightVC init")
        self.backgroundColor = backgroundColor
        super.init(nibName: nil, bundle: nil)
     }
@@ -23,11 +24,18 @@ class RightViewController: NSViewController{
     }
 
     override func loadView() {
+       print("RightVC loadView")
        view = NSView()
        view.wantsLayer = true
        view.layer?.backgroundColor = backgroundColor.cgColor
 //        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
 //        view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
+
+    }
+    override func viewDidLoad() {
+        print("RightVC viewDidLoad before super.viewDidLoad()")
+        super.viewDidLoad()
+        print("RightVC viewDidLoad after super.viewDidLoad()")
 
     }
 }

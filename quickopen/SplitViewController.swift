@@ -10,15 +10,16 @@ import Foundation
 import Cocoa
 
 class SplitViewController: NSSplitViewController{
-    private var matchesOutlineView : NSView!
+//    private var matchesOutlineView : NSView!
     public var leftVC: LeftViewController!
     public var rightVC: RightViewController!
+    private var search: QuickOpenOption!
     private func patch() {
         let v = NSSplitView()
         v.isVertical = true
         v.dividerStyle = .thin
         splitView = v
-        leftVC = LeftViewController(backgroundColor: .red, scrollDocumentView: matchesOutlineView )
+        leftVC = LeftViewController(backgroundColor: .red, search: search)
         rightVC = RightViewController(backgroundColor: .green)
         splitViewItems = [
             NSSplitViewItem(viewController: leftVC),
@@ -34,9 +35,10 @@ class SplitViewController: NSSplitViewController{
 //        v.setFrameSize(newSize)
     
     }
-    convenience init(leftScrollDocumentView: NSView) {
+    convenience init(search: QuickOpenOption) {
+        print("SplitView init")
         self.init(nibName: nil, bundle: nil)
-        matchesOutlineView = leftScrollDocumentView
+        self.search = search
         patch()
     }
     
@@ -52,4 +54,16 @@ class SplitViewController: NSSplitViewController{
     override func viewWillAppear() {
         splitView.setPosition(150, ofDividerAt: 0)
     }
+
+    override func loadView() {
+        print("SplitVC loadView()")
+        view = splitView
+    }
+
+    override func viewDidLoad() {
+        print("SplitVC viewDidLoad before super.viewDidLoad()")
+        super.viewDidLoad()
+        print("SplitVC viewDidLoad after super.viewDidLoad()")
+    }
+
 }
