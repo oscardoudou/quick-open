@@ -87,6 +87,10 @@ extension LeftViewController: NSOutlineViewDataSource{
     func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
         return search.height
     }
+    //this method is important to have row focus when setSelected(0) is executed, without this it row won't be focused
+    func outlineView(_ outlineView: NSOutlineView, rowViewForItem item: Any) -> NSTableRowView? {
+      return OpenQuicklyTableRowView(frame: NSZeroRect)
+    }
 }
 
 extension LeftViewController: NSOutlineViewDelegate{
