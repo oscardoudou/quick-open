@@ -15,6 +15,7 @@ class LeftViewController: NSViewController{
     public var matchesOutlineView: NSOutlineView!
     public var matches: [Any]!
     private var search: QuickOpenOption!
+    public var quickOpenVC: QuickOpenViewController!
     
     init(backgroundColor: NSColor, search: QuickOpenOption) {
         print("LeftVC init")
@@ -75,6 +76,12 @@ class LeftViewController: NSViewController{
     
 }
 extension LeftViewController: NSOutlineViewDataSource{
+    func outlineViewSelectionDidChange(_ notification: Notification) {
+        quickOpenVC.selected = matchesOutlineView.selectedRow
+    }
+    func outlineView(_ outlineView: NSOutlineView, shouldSelectItem item: Any) -> Bool {
+      return true
+    }
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         return matches.count
     }

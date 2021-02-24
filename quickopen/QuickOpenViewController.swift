@@ -10,10 +10,16 @@ import Foundation
 import Cocoa
 
 enum KeyCode {
-  static let esc: UInt16 = 53
+    static let esc: UInt16 = 53
+    static let up: UInt16 = 0x7E
+    static let down: UInt16 = 0x7D
 }
 
 class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
+
+    let IGNORED_KEYCODES = [
+      KeyCode.esc, KeyCode.up, KeyCode.down
+    ]
 
     private var search: QuickOpenOption!
     private var matches: [Any]!
@@ -25,6 +31,7 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
             leftVC.matches = matches
         }
     }
+    public var selected: Int!
     private var visualEffectView: NSVisualEffectView!
     private var stackView: NSStackView!
     private var matchesOutlineView: NSOutlineView!
@@ -73,9 +80,11 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewDidLoad() {
+        //set variable for cross referencing, which enable us to split the responsibility, avoid all end up in core ViewController
         leftVC = splitVC.leftVC
         rightVC = splitVC.rightVC
         matchesOutlineView = leftVC.matchesOutlineView
+        leftVC.quickOpenVC = self
         print("quickopenVC viewDidLoad before super.viewDidLoad()")
         super.viewDidLoad()
         print("quickopenVC viewDidLoad before super.viewDidLoad()")
@@ -96,7 +105,10 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     }
     
     override func keyUp(with event: NSEvent) {
-
+        //has to ignore the up down esc, otherwise after keydown handler executed, this keyUp would be executed causing reloadMatches wrongly execute, which looks likes index stuck at index 0
+        if IGNORED_KEYCODES.contains(event.keyCode){
+            return
+        }
       let text = searchField.stringValue
       matches = search.delegate?.textWasEntered(toBeSearched: text)
       reLoadMatches()
@@ -107,7 +119,28 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
             quickOpenWindowController?.toggle()
             return nil
         }
+        if keyCode == KeyCode.up {
+            if let currentSelection = selected {
+                setSelect(index: currentSelection - 1 )
+            }
+            return nil
+        }
+        if keyCode == KeyCode.down {
+            if let currentSelection = selected {
+                setSelect(index: currentSelection + 1)
+            }
+            return nil
+        }
         return event
+    }
+    func setSelect(index: Int!){
+        if index < 0 || index >= matches.count {
+            return
+        }
+        selected = index
+        let selectedIndex = IndexSet(integer: index)
+        matchesOutlineView.scrollRowToVisible(index)
+        matchesOutlineView.selectRowIndexes(selectedIndex, byExtendingSelection: false)
     }
     private func clearMatches(){
         matches = []
@@ -116,6 +149,10 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
     private func reLoadMatches(){
         matchesOutlineView.reloadData()
         updateView()
+        //every time need to reloadMatched, focus need to be reset to index 0
+        if matches.count > 0 {
+            setSelect(index: 0)
+        }
     }
     private func updateView(){
         let rowHeight = matches.count > 0 ? CGFloat(250) : 0
