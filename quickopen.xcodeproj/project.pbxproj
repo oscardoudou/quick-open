@@ -17,6 +17,7 @@
 		3B9234592418966500364BBC /* QuickOpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9234582418966500364BBC /* QuickOpenViewController.swift */; };
 		3B92345B2418969100364BBC /* QuickOpenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B92345A2418969100364BBC /* QuickOpenWindow.swift */; };
 		3BBD18D125E4BDA300E35452 /* QuickOpenTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBD18D025E4BDA300E35452 /* QuickOpenTableRowView.swift */; };
+		3BBD18EB25E7564B00E35452 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBD18EA25E7564B00E35452 /* DataController.swift */; };
 		3BEB4F1025745BA000ED8B07 /* GlobalEventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEB4F0F25745BA000ED8B07 /* GlobalEventMonitor.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		3B9234582418966500364BBC /* QuickOpenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenViewController.swift; sourceTree = "<group>"; };
 		3B92345A2418969100364BBC /* QuickOpenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenWindow.swift; sourceTree = "<group>"; };
 		3BBD18D025E4BDA300E35452 /* QuickOpenTableRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOpenTableRowView.swift; sourceTree = "<group>"; };
+		3BBD18EA25E7564B00E35452 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		3BEB4F0F25745BA000ED8B07 /* GlobalEventMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalEventMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +80,7 @@
 				3B83A6EC259A9E9000777254 /* RightViewController.swift */,
 				3B83A6EE259A9F0D00777254 /* SplitViewController.swift */,
 				3BBD18D025E4BDA300E35452 /* QuickOpenTableRowView.swift */,
+				3BBD18EA25E7564B00E35452 /* DataController.swift */,
 			);
 			path = quickopen;
 			sourceTree = "<group>";
@@ -167,6 +170,7 @@
 				3BBD18D125E4BDA300E35452 /* QuickOpenTableRowView.swift in Sources */,
 				3BEB4F1025745BA000ED8B07 /* GlobalEventMonitor.swift in Sources */,
 				3B0EE63D25852463000018FF /* QuickOpenDelegate.swift in Sources */,
+				3BBD18EB25E7564B00E35452 /* DataController.swift in Sources */,
 				3B9234592418966500364BBC /* QuickOpenViewController.swift in Sources */,
 				3B83A6EF259A9F0D00777254 /* SplitViewController.swift in Sources */,
 				3B5270412421C0A7004475FE /* QuickOpenOption.swift in Sources */,
