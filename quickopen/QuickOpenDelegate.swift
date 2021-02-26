@@ -10,7 +10,7 @@ import Foundation
 import Cocoa
 
 public protocol QuickOpenDelegate {
-    func recordWasSelected(selected record: Any)
+    func recordWasSelected(selected record: Any) -> NSImage?
     func textWasEntered(toBeSearched text: String) -> [Any]
     /// return row for outlineview
     func quickOpen(_ record: Any) -> NSView?

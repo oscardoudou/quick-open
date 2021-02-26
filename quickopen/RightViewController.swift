@@ -12,7 +12,7 @@ import Cocoa
 
 class RightViewController: NSViewController{
     private let backgroundColor: NSColor
-
+    private var imageView: NSImageView!
     init(backgroundColor: NSColor) {
         print("RightVC init")
        self.backgroundColor = backgroundColor
@@ -25,7 +25,7 @@ class RightViewController: NSViewController{
 
     override func loadView() {
        print("RightVC loadView")
-       view = NSView()
+       view = NSScrollView()
        view.wantsLayer = true
        view.layer?.backgroundColor = backgroundColor.cgColor
 //        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
@@ -36,6 +36,35 @@ class RightViewController: NSViewController{
         print("RightVC viewDidLoad before super.viewDidLoad()")
         super.viewDidLoad()
         print("RightVC viewDidLoad after super.viewDidLoad()")
+        imageView = NSImageView()
+        if let scrollView = view as? NSScrollView {
+            scrollView.drawsBackground = false
+            scrollView.wantsLayer = true
+            scrollView.borderType = NSBorderType.noBorder
+            scrollView.autohidesScrollers = true
+            scrollView.hasVerticalScroller = true
+//            scrollView.translatesAutoresizingMaskIntoConstraints = true
 
+            scrollView.allowsMagnification = true
+            NSLayoutConstraint.activate([
+                scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+                scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+
+    func showImageDetail(image: NSImage?){
+        var imageRect: NSRect
+        imageView.image = image
+        //if user remove the file it will crash here
+        imageRect = NSMakeRect(0.0, 0.0, imageView.image!.size.width, imageView.image!.size.height)
+        imageView.setFrameSize(CGSize(width: imageRect.width, height: imageRect.height))
+        imageView.imageScaling = .scaleProportionallyDown
+        if let scrollView = view as? NSScrollView {
+            scrollView.documentView = imageView
+        }
     }
 }

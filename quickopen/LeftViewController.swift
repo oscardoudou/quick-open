@@ -16,6 +16,7 @@ class LeftViewController: NSViewController{
     public var matches: [Any]!
     private var search: QuickOpenOption!
     public var quickOpenVC: QuickOpenViewController!
+    public var rightVC: RightViewController!
     
     init(backgroundColor: NSColor, search: QuickOpenOption) {
         print("LeftVC init")
@@ -78,6 +79,8 @@ class LeftViewController: NSViewController{
 extension LeftViewController: NSOutlineViewDataSource{
     func outlineViewSelectionDidChange(_ notification: Notification) {
         quickOpenVC.selected = matchesOutlineView.selectedRow
+        let image = search.delegate?.recordWasSelected(selected: matches[matchesOutlineView.selectedRow])
+        rightVC.showImageDetail(image: image)
     }
     func outlineView(_ outlineView: NSOutlineView, shouldSelectItem item: Any) -> Bool {
       return true

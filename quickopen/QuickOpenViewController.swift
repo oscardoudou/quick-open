@@ -85,6 +85,7 @@ class QuickOpenViewController: NSViewController, NSTextFieldDelegate {
         rightVC = splitVC.rightVC
         matchesOutlineView = leftVC.matchesOutlineView
         leftVC.quickOpenVC = self
+        leftVC.rightVC = rightVC
         print("quickopenVC viewDidLoad before super.viewDidLoad()")
         super.viewDidLoad()
         print("quickopenVC viewDidLoad before super.viewDidLoad()")
