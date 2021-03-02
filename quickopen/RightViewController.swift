@@ -13,6 +13,7 @@ import Cocoa
 class RightViewController: NSViewController{
     private let backgroundColor: NSColor
     private var imageView: NSImageView!
+    private var scrollView: NSScrollView!
     init(backgroundColor: NSColor) {
         print("RightVC init")
        self.backgroundColor = backgroundColor
@@ -25,9 +26,11 @@ class RightViewController: NSViewController{
 
     override func loadView() {
        print("RightVC loadView")
-       view = NSScrollView()
-       view.wantsLayer = true
-       view.layer?.backgroundColor = backgroundColor.cgColor
+       scrollView = NSScrollView()
+       view = NSView()
+       view.addSubview(scrollView)
+//       scrollView.wantsLayer = true
+//       scrollView.layer?.backgroundColor = backgroundColor.cgColor
 //        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
 //        view.heightAnchor.constraint(greaterThanOrEqualToConstant: 16).isActive = true
 
@@ -37,7 +40,7 @@ class RightViewController: NSViewController{
         super.viewDidLoad()
         print("RightVC viewDidLoad after super.viewDidLoad()")
         imageView = NSImageView()
-        if let scrollView = view as? NSScrollView {
+
             scrollView.drawsBackground = false
             scrollView.wantsLayer = true
             scrollView.borderType = NSBorderType.noBorder
@@ -53,18 +56,16 @@ class RightViewController: NSViewController{
                 scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
             scrollView.translatesAutoresizingMaskIntoConstraints = false
-        }
+
     }
 
     func showImageDetail(image: NSImage?){
         var imageRect: NSRect
         imageView.image = image
         //if user remove the file it will crash here
-        imageRect = NSMakeRect(0.0, 0.0, imageView.image!.size.width, imageView.image!.size.height)
+        imageRect = NSMakeRect(0.0, 0.0, view.frame.width, view.frame.height)
         imageView.setFrameSize(CGSize(width: imageRect.width, height: imageRect.height))
-        imageView.imageScaling = .scaleProportionallyDown
-        if let scrollView = view as? NSScrollView {
+        imageView.imageScaling = .scaleProportionallyUpOrDown
             scrollView.documentView = imageView
-        }
     }
 }
