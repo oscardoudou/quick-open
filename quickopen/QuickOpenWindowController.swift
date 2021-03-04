@@ -44,7 +44,7 @@ open class QuickOpenWindowController: NSWindowController {
     override open func close() {
       if windowIsVisible {
 //        options.delegate?.windowDidClose()
-        print("window?.isKeyWindow:\(window?.isKeyWindow)")
+        print("window?.isKeyWindow:\(String(describing: window?.isKeyWindow))")
         super.close()
       }
     }
