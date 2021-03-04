@@ -37,7 +37,7 @@ open class QuickOpenWindowController: NSWindowController {
         self.search = search
         
         if search.persistPosition {
-          window.setFrameAutosaveName(AUTOSAVE_NAME)
+            window.setFrameAutosaveName(NSWindow.FrameAutosaveName(AUTOSAVE_NAME))
         }
     }
     
