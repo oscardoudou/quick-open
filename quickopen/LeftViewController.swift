@@ -79,8 +79,20 @@ class LeftViewController: NSViewController{
 extension LeftViewController: NSOutlineViewDataSource{
     func outlineViewSelectionDidChange(_ notification: Notification) {
         quickOpenVC.selected = matchesOutlineView.selectedRow
-        let image = search.delegate?.recordWasSelected(selected: matches[matchesOutlineView.selectedRow])
-        rightVC.showImageDetail(image: image)
+        let result = search.delegate?.recordWasSelected(selected: matches[matchesOutlineView.selectedRow])
+        let type = result![1] as! String
+        switch type {
+        case "image":
+            let image = result![0] as! NSImage
+            rightVC.showImageDetail(image: image)
+        case "text":
+            let text = result![0] as! String
+            rightVC.showTextDetail(text: text)
+        default:
+            let text = result![0] as! String
+            rightVC.showTextDetail(text: text)
+        }
+
     }
     func outlineView(_ outlineView: NSOutlineView, shouldSelectItem item: Any) -> Bool {
       return true

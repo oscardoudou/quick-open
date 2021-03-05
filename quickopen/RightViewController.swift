@@ -12,8 +12,10 @@ import Cocoa
 
 class RightViewController: NSViewController{
     private let backgroundColor: NSColor
-    private var imageView: NSImageView!
     private var scrollView: NSScrollView!
+    private var imageView: NSImageView!
+    private var textView: NSTextView!
+
     init(backgroundColor: NSColor) {
         print("RightVC init")
        self.backgroundColor = backgroundColor
@@ -40,6 +42,7 @@ class RightViewController: NSViewController{
         super.viewDidLoad()
         print("RightVC viewDidLoad after super.viewDidLoad()")
         imageView = NSImageView()
+        textView = NSTextView()
 
             scrollView.drawsBackground = false
             scrollView.wantsLayer = true
@@ -67,5 +70,13 @@ class RightViewController: NSViewController{
         imageView.setFrameSize(CGSize(width: imageRect.width, height: imageRect.height))
         imageView.imageScaling = .scaleProportionallyUpOrDown
             scrollView.documentView = imageView
+    }
+
+    func showTextDetail(text: String){
+        var textRect: NSRect
+        textRect = NSMakeRect(0.0, 0.0, view.frame.width, view.frame.height)
+        textView.setFrameSize(CGSize(width: textRect.width, height: textRect.height))
+        textView.string = text
+        scrollView.documentView = textView
     }
 }
